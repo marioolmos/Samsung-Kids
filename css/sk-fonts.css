@@ -1,0 +1,17 @@
+
+@font-face {
+  font-family: 'SamsungSharpSans';
+  src: url("../fonts/SamsungSharpSans.ttf") format("truetype");
+  src: url("../fonts/SamsungSharpSans.eot") format("embedded-opentype");
+  src: url("../fonts/SamsungSharpSans.woff") format("woff");
+  font-weight: 100;
+}
+
+
+@font-face {
+  font-family: 'SamsungOne';
+  src: url("../fonts/SamsungOne.ttf") format("truetype");
+  src: url("../fonts/SamsungOne.eot") format("embedded-opentype");
+  src: url("../fonts/SamsungOne.woff") format("woff");
+    }
+	

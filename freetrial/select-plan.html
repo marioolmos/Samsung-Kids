@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <title>FingerprintPlay</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="description" content="FingerprintPlay" />
+        <meta name="keywords" content="FingerprintPlay" />
+        <meta name="author" content="Mario Olmos" />
+        <link rel="shortcut icon" href="../favicon.ico"> 
+        <link rel="stylesheet" type="text/css" href="../css/demo.css" />
+        <link href="../css/main.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="../css/style.css" />
+        <link href="../css/menu.css" rel="stylesheet" type="text/css">
+        <link href="../css/fonts.css" rel="stylesheet" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="js/jquery.validate.min.js"></script>
+        <script src="js/additional-methods.min.js"></script>
+        <script src="js/validation-cc.js"></script>
+        <script src="js/validation-common.js"></script>
+        <script src="https://js.stripe.com/v2/"></script>
+        <script type=text/javascript>
+            Stripe.setPublishableKey("pk_test_qMsg8Wo0dY6RjCvKkL0peztx");
+            var clickedPlan = "monthly";
+            function selectPlan(plan){
+                 clickedPlan = $(plan).attr("id");
+
+                var otherPlan = "monthly";
+                $("#" + clickedPlan).removeClass("box-grey");
+                $("#" + clickedPlan).addClass("box-orange");
+                if (clickedPlan == "monthly") {
+                    otherPlan = "annual";
+                    document.getElementById("modal_text").innerHTML = "You will be charged $7.99 (50% off first 6 months) at the end of your trial.<br>"+
+                            "Your subscription will auto-renew each year, and can be canceled at any time.  ";
+                } else {
+                    document.getElementById("modal_text").innerHTML = "You will be charged $59.99 (50% off first 6 months) at the end of your trial.<br>"+
+                    "Your subscription will auto-renew each year, and can be canceled at any time.  ";
+                }
+                localStorage.setItem("plan", clickedPlan);
+                $("#" + otherPlan).removeClass("box-orange");
+                $("#" + otherPlan).addClass("box-grey");
+            }
+
+            function toggleConfim(status) {
+                if(status == "hide") {
+                    $("#modal-2").prop("checked", false);
+                } else {
+                    $("#modal-2").prop("checked", true);
+                }
+            }
+
+
+            function getStripeToken()
+            {
+                if($("#payment-form").valid()) {
+                    // disable the button
+                    var $form = $('#payment-form');
+                    $form.find('.form-submit').prop('disabled', true);
+                    //expiration month and year to be spilt
+                    var exp_month = $('#expiration-month').val();
+                    var exp_year = $('#expiration-year').val();
+
+                    // Request a token from Stripe:
+                    Stripe.card.createToken({
+                        number: $('#card-number').val(),
+                        cvc: $('#cvc').val(),
+                        exp_month: exp_month,
+                        exp_year: exp_year,
+                        address_zip: $('#zip').val()
+                    }, getStripeTokenResponseHandler);
+                }
+                return false; // stay on page
+            }
+            function getStripeTokenResponseHandler(status, response)
+            {
+                // re-enable the button
+                var $form = $('#payment-form');
+                $form.find('.form-submit').prop('disabled', false);
+
+                $form.find('.payment-errors').text("");
+                // we successfully obtained payment source, gather all the inputs to createAccount
+                var data = {
+                    auth_guid: localStorage.getItem("auth_guid"),
+
+                    stripe_token: response.id,
+                    kids: JSON.parse(localStorage.getItem("kids")),
+                    plan: localStorage.getItem("plan"),
+                    pin: localStorage.getItem("pin"),
+                    user_id: localStorage.getItem("user_id"),
+                };
+
+                $.ajax({
+                    method        :   "POST"  ,
+                    url         :   location.protocol + "//" + location.host + "/api/v4/samsungwebui/createAccount",
+                    data        :   JSON.stringify(data),
+                    contentType :   "application/json",
+                    success     :   function (success) {
+                        window.location.href = "ready.html";
+                    },
+                    error: function (error) {
+                        var $form = $('#payment-form');
+                        $form.find('.payment-errors').text(JSON.parse(error.responseText));
+                    }
+                }, "json").fail(function(error) {
+                    var $form = $('#payment-form');
+                    $form.find('.payment-errors').text(JSON.parse(error.responseText));
+                });
+//        }
+            }
+        </script>
+
+		
+</head>
+    <body>
+    
+    <header>
+
+		<a href="#" id="logo"></a>
+
+		<nav>
+
+			<a href="#" id="menu-icon"></a>
+
+			<ul>
+
+				<li><a href="#">PRODUCT DETAILS</a></li>
+				<li><a href="#">PARENT FEATURES</a></li>
+				<li><a href="#" class="current">FREE TRIAL</a></li>
+				<li><a href="#">DOWNLOAD</a></li>
+				<li><a href="#">SUPPORT</a></li>
+
+			</ul>
+
+		</nav>
+
+	</header>
+ 
+    
+<div class="wrapper-interior">  
+
+
+<div class="main-double">
+<div class="main-title-box">
+<h1>Select a Plan</h1>
+</div>
+	<div class="left-twenty">
+      <div class="steps"><img src="../images/01-off.png" alt="Step 1" class="step-image"/><br>
+	  	<span class="step-title">
+	  	Child Profile</span>
+      </div>
+      <div class="steps"><img src="../images/02-off.png" alt="Step 2" class="step-image"/><br>
+	  	<span class="step-title">
+	  	Parent PIN</span>
+      </div>
+      <div class="steps"><img src="../images/03-on.png" alt="Step 3" class="step-image"/><br>
+	  	<span class="step-title">
+	  	Payment</span>
+      </div>
+	  
+	</div>
+    
+	<div class="right-eighty">
+	  
+      
+      
+<div class="container-medium" style="text-align:center;">
+<h2>Please choose a payment plan. <br>
+      You won't be charged during your free trial.<br>
+      <br>
+      </h2>
+      
+<div class="planes-container">
+<div class="plans">
+    <a href="#" id="monthly" class="box-orange" onclick="selectPlan(this);">
+        <br><span style="font-size:1.3em; margin-top:50px; font-weight:100;">Monthly Plan</span><br>
+        <span style="font-size:1.8em; margin-top:50px; font-weight:100;">$7.99*</span>
+    </a>   
+</div>
+
+<div class="plans">
+    <a href="#" id="annual" class="box-grey" onclick="selectPlan(this);">
+        <br><span style="font-size:1.3em; margin-top:50px; font-weight:100;">Yearly Plan</span><br>
+        <span style="font-size:1.8em; margin-top:50px; font-weight:100;">$59.99*</span>
+    </a>    
+</div>
+</div>
+<div class="separation-plans"></div>
+	  
+      
+  <!-- Form Starts Here -->
+    
+    <div id="wrapper">
+      
+  <div>
+								<section>
+									<form id="payment-form" method="post" action="#">
+                                       <div class="field half first">
+											CARD NUMBER<br>
+<input class="form-control" name="card-number" type="text" id="card-number" placeholder="" size=20/>
+									  </div>
+                                        
+                                      <div class="half">
+										  <span style="text-align:left;">EXPIRATION (MM/YY)</span><br><div class="expiration"><div class="field"><input type="text" name="expiration-month" id="expiration-month" size=2 placeholder="" class="form-control"/></div><span class="middletext"> &nbsp;&nbsp;/&nbsp;&nbsp;</span><div class="field"><input type="text" name="expiration-year" id="expiration-year" size=2 placeholder="" class="form-control"/></div>
+									  </div></div>
+                                       
+                                      
+                                      <div class="field third first styled-select">
+										  STATE<select name="state" id="state">
+                                          <option value="" selected="selected">--</option>
+                                          <option value="AL">AL</option>
+                                          <option value="AK">AK</option>
+                                          <option value="AZ">AZ</option>
+                                          <option value="AR">AR</option>
+                                          <option value="CA">CA</option>
+                                          <option value="CO">CO</option>
+                                          <option value="CT">CT</option>
+                                          <option value="DE">DE</option>
+                                          <option value="DC">DC</option>
+                                          <option value="FL">FL</option>
+                                          <option value="GA">GA</option>
+                                          <option value="HI">HI</option>
+                                          <option value="ID">ID</option>
+                                          <option value="IL">IL</option>
+                                          <option value="IN">IN</option>
+                                          <option value="IA">IA</option>
+                                          <option value="KS">KS</option>
+                                          <option value="KY">KY</option>
+                                          <option value="LA">LA</option>
+                                          <option value="ME">ME</option>
+                                          <option value="MD">MD</option>
+                                          <option value="MA">MA</option>
+                                          <option value="MI">MI</option>
+                                          <option value="MN">MN</option>
+                                          <option value="MS">MS</option>
+                                          <option value="MO">MO</option>
+                                          <option value="MT">MT</option>
+                                          <option value="NE">NE</option>
+                                          <option value="NV">NV</option>
+                                          <option value="NH">NH</option>
+                                          <option value="NJ">NJ</option>
+                                          <option value="NM">NM</option>
+                                          <option value="NY">NY</option>
+                                          <option value="NC">NC</option>
+                                          <option value="ND">ND</option>
+                                          <option value="OH">OH</option>
+                                          <option value="OK">OK</option>
+                                          <option value="OR">OR</option>
+                                          <option value="PA">PA</option>
+                                          <option value="RI">RI</option>
+                                          <option value="SC">SC</option>
+                                          <option value="SD">SD</option>
+                                          <option value="TN">TN</option>
+                                          <option value="TX">TX</option>
+                                          <option value="UT">UT</option>
+                                          <option value="VT">VT</option>
+                                          <option value="VA">VA</option>
+                                          <option value="WA">WA</option>
+                                          <option value="WV">WV</option>
+                                          <option value="WI">WI</option>
+                                          <option value="WY">WY</option>
+                                      </select>
+									  </div>
+                                      <div class="field third">
+											ZIP CODE<input class="form-control" type="text" name="zip" id="zip" placeholder="" size=6/>
+									  </div>
+                                      <div class="field third">
+											CVC<input class="form-control" type="text" name="cvc" id="cvc" size=4 placeholder="" />
+									  </div>
+                                      
+                                      
+                                      
+                                      
+                                      
+<div class="separation"></div>
+                                        <input type="button" onclick="toggleConfim('show');" class="special-button form-submit" value="Start Your Free Trial">
+                                        <br>
+                                        <br>
+                                      * Taxes may apply
+                                        <div class="errors">
+
+                                        </div>
+</form>
+								</section>
+	  </div>
+	  </div>
+      
+      <p>&nbsp;</p>
+<!-- Form End Here -->
+        
+  </div>
+	</div>
+    </div>
+    <div class="separation"></div>
+</div>    
+                
+    
+    
+    
+    
+    
+    
+</div>
+    
+    <input class="modal-state" id="modal-1" type="checkbox" />
+<div class="modal">
+  <label class="modal__bg" for="modal-1"></label>
+  <div class="modal__inner">
+    <label class="modal__close" for="modal-1"></label>
+    <div id="wrapper">
+  <div>
+  <br><h2 style="color:#000 !important; text-align:center; font-weight:600;">Please enter a Promo Code</h2><br><br>
+									<form method="post" action="#">
+										<div class="field ">
+											<strong>ENTER PROMO CODE</strong>
+											<input name="email" type="text" id="email" placeholder="" />
+										</div>
+                                      
+<div class="separation"></div>
+                                        <input type="button" class="special-cancel-button" value="Cancel"></br>
+                                        <input type="button" class="special-button" value="Next">
+									</form>
+	  </div>
+    </div>
+  </div>
+</div>
+
+<input class="modal-state" id="modal-2" type="checkbox" />
+<div class="modal">
+  <label class="modal__bg" for="modal-2"></label>
+  <div class="modal__inner">
+    <label class="modal__close" for="modal-2"></label>
+    <div id="wrapper">
+  <div>
+  <br><h2 style="color:#000 !important; text-align:center; font-weight:600;">Please confirm your Subscription</h2><br><br>
+									<form method="post" action="#">
+<h2 id="modal_text" style="text-align:center; font-size:1.4em !important;">You will be charged $7.99 (50% off first 6 months) at the end of your trial.<br>
+Your subscription will auto-renew each year, and can be canceled at any time.  </h2>                                    
+<div class="separation"></div>
+                                        </br>
+                                        <input type="button" class="special-button" value="Confirm" onclick="getStripeToken();"></br>
+                                        <input type="button" class="special-cancel-button" value="Cancel" onclick="toggleConfim('hide');">
+									</form>
+	  </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Footer -->
+<div class="separation"></div>
+<div class="footer">
+<div class="margin-footer">1. Samsung Kids App can be downloaded on Samsung Galaxy phone S4 and  above, Samsung Galaxy Note 4 and above, Samsung Galaxy Tab 3 and above,  Samsung Galaxy Tab S and A and Samsung Galaxy View.<br>
+  <br>
+2. To receive a 30 days free trial (a $ 7.99 value) for  Samsung Kids Service ("Offer"), download Samsung Kids from Galaxy Apps  or Google Play store on your compatible Samsung device*, sign-on with  Samsung Account, complete setup and provide a valid form of  payment,choose a subscription plan and click "Subscribe". You must  redeem this Offer before 12/31/2016. To avoid a monthly subscription  fee, Participant must cancel subscription at any time during the 30 day  trial by selecting "Cancel Subscription" in the "Manage Subscriptions"  menu of the App. No refunds or credit are provided for subscriptions  cancelled after the renewal date.  A Samsung Kids subscription is  subject to the Samsung Kids Terms of Service <a href="http://www.samsung.com/us/samsung-kids/terms-and-conditions/" target="_blank">http://www.samsung.com/us/samsung-kids/terms-and-conditions/</a>.  A valid form of payment, a Samsung device and Samsung Account required  to redeem Offer. Limit only 1 offer per person. This Offer is valid to  all new Samsung Kids subscribers. This Offer is non-transferrable and  cannot be combined with other Samsung offer, discount, or rebate. Offer  only valid in the United States and while supplies last. Void where  prohibited or restricted by law.<br>
+<br>
+© 2016 Samsung Electronics America, Inc. Samsung,  Samsung Kids, Samsung Kids logos are all trademarks of Samsung  Electronics Co., Ltd. All other brands, products and services, and their  respective trademarks, names and logos are the property of their  respective owners. This content is provided for entertainment and  information purposes only. All information included herein is subject to  change without notice.</div>      		
+</div>
+
+
+</body>
+</html>

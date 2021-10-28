@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <title>FingerprintPlay</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="description" content="FingerprintPlay" />
+        <meta name="keywords" content="FingerprintPlay" />
+        <meta name="author" content="Mario Olmos" />
+        <link rel="shortcut icon" href="../favicon.ico"> 
+        <link rel="stylesheet" type="text/css" href="../css/demo.css" />
+        <link href="../css/main.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="../css/style.css" />
+        <link href="../css/fonts.css" rel="stylesheet" type="text/css">
+<!-- NEW MENU START -->
+<!-- css -->
+
+<link rel="stylesheet" href="../css/menu-responsive.css" />
+    
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="js/jquery.validate.min.js"></script>
+        <script src="js/additional-methods.min.js"></script>
+        <script src="js/validation-pin.js"></script>
+
+        <script type="text/javascript">
+           function saveParentPin() {
+               if($("#pin-form").valid()) {
+                   var pin = $("#pin").val();
+                   var confirm_pin = $("#confirm_pin").val();
+                   if (pin === confirm_pin) {
+                       localStorage.setItem("pin", pin);
+                       var path = location.href.split("/");
+                       path.pop();
+                       window.location = path.join("/") + "/select-plan.html";
+                   } else {
+                       $(".error-msg").text("Pin and Confirm Pin do not match");
+                       $(".error-msg").removeClass("error-status-hide");
+                       $(".error-msg").addClass("error-status-show");
+                   }
+               }
+           }
+        </script>
+
+	<!-- js RESPONSIVE MENU-->
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/modernizr.custom.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#nav-mobile").html($("#nav-main").html());
+        $("#nav-trigger span").click(function(){
+            if ($("nav#nav-mobile ul").hasClass("expanded")) {
+                $("nav#nav-mobile ul.expanded").removeClass("expanded").slideUp(250);
+                $(this).removeClass("open");
+            } else {
+                $("nav#nav-mobile ul").addClass("expanded").slideDown(250);
+                $(this).addClass("open");
+            }
+        });
+    });
+</script>
+<!-- js BUTTON APPEARS-->
+<script>
+$(window).scroll(function() {
+
+    if ($(this).scrollTop()>250)
+     {
+        $('.buttonscreen').fadeIn();
+     }
+    else
+     {
+      $('.buttonscreen').fadeOut();
+     }
+ });
+ </script>
+ 
+ <!-- NEW MENU END -->	
+</head>
+    <body>
+    
+    <header>
+
+	<div id="wrapper"><!-- /#top-bar --><!-- /header -->
+
+
+<div id="main-menu">
+    <div class="container-menu">
+    <img src="../images/logo-samsung-kids.png" alt="" width="105" height="37" class="main-logo"/>
+        <span class="free-trial-button special-button buttonmobile">SIGN UP NOW</span>
+        <span class="free-trial-button special-button buttonscreen">SIGN UP NOW</span>
+        
+        <div id="nav-trigger">
+            <span><img src="../images/mobile-menu.png" width="42" height="42" alt=""/></span>
+        </div>
+        <nav id="nav-main">
+        
+		<ul>
+           <li><a href="">PRODUCT DETAILS</a></li>
+            <li><a href="">PARENT FEATURES</a></li>
+            <li><a href="">FREE TRIAL</a></li>
+            <li><a href="">DOWNLOAD</a></li>
+            <li><a href="">SUPPORT</a></li>
+          </ul>
+         </nav>
+        <nav id="nav-mobile"></nav>
+
+        <section>
+            
+        </section>
+    </div>
+</div><!-- #main-menu -->
+
+</div><!-- /#wrapper -->
+
+	</header>
+ 
+    
+<div class="wrapper-interior">  
+
+
+<div class="main-double">
+<div class="main-title-box">
+<h1>Set a Parent PIN</h1>
+</div>
+	<div class="left-twenty">
+      <div class="steps"><img src="../images/01-off.png" alt="Step 1" class="step-image"/><br>
+	  	<span class="step-title">
+	  	Child Profile</span>
+      </div>
+      <div class="steps"><img src="../images/02-on.png" alt="Step 2" class="step-image"/><br>
+	  	<span class="step-title">
+	  	Parent PIN</span>
+      </div>
+      <div class="steps"><img src="../images/03-off.png" alt="Step 3" class="step-image"/><br>
+	  	<span class="step-title">
+	  	Payment</span>
+      </div>
+	  
+	</div>
+	<div class="right-eighty"><div class="container-medium2" style="text-align:center;">
+    <h2>Your PIN allows you to access parental controls and exit the app<br>
+      <br>
+      
+  <!-- Form Starts Here -->
+    </h2>
+    <div id="wrapper">
+  <div>
+									<form id="pin-form" method="post" action="#">
+										<div class="field">
+											<strong>ENTER 4-DIGIT PIN</strong>
+											<input class="form-control" name="pin" maxlength=4 type="password" id="pin" placeholder="" required minlength="4" />
+										</div>
+										<div class="field">
+											<strong>CONFIRM PIN</strong>
+											<input class="form-control" name="confirm_pin" maxlength=4 type="password" id="confirm_pin" placeholder="" required minlength="4"/>
+                                            <br>
+                                           <br>
+ <div class="hide-show">
+<input type="checkbox" name="checkbox" id="checkbox" >
+										
+<label for="checkbox"><span style="text-align: left; margin-left:25px; color:#000;">Show Pin</span></label>
+      </div>
+</div>
+
+
+                                        <label class=" error-msg error-status-hide">+Add Another Child</label>
+<div class="separation"></div>
+                                      <input type="button" class="special-button" value="Next" onclick="saveParentPin()"><!--<input class="btn btn-primary" id="submit-button" type="submit" value="Validate test">-->
+                                        <div class="errors"></div>
+                                    </form>
+                                    
+	  </div>
+	  </div>
+<!-- Form End Here -->
+        
+  </div>
+	</div>
+    </div>
+    <div class="separation"></div>
+</div>    
+        
+    
+    
+    
+    
+    
+    
+</div>
+   
+   
+<!-- Footer -->
+<div class="separation"></div>
+<div class="footer">
+<div class="margin-footer">1. Samsung Kids App can be downloaded on Samsung Galaxy phone S4 and  above, Samsung Galaxy Note 4 and above, Samsung Galaxy Tab 3 and above,  Samsung Galaxy Tab S and A and Samsung Galaxy View.<br>
+  <br>
+2. To receive a 30 days free trial (a $ 7.99 value) for  Samsung Kids Service ("Offer"), download Samsung Kids from Galaxy Apps  or Google Play store on your compatible Samsung device*, sign-on with  Samsung Account, complete setup and provide a valid form of  payment,choose a subscription plan and click "Subscribe". You must  redeem this Offer before 12/31/2016. To avoid a monthly subscription  fee, Participant must cancel subscription at any time during the 30 day  trial by selecting "Cancel Subscription" in the "Manage Subscriptions"  menu of the App. No refunds or credit are provided for subscriptions  cancelled after the renewal date.  A Samsung Kids subscription is  subject to the Samsung Kids Terms of Service <a href="http://www.samsung.com/us/samsung-kids/terms-and-conditions/" target="_blank">http://www.samsung.com/us/samsung-kids/terms-and-conditions/</a>.  A valid form of payment, a Samsung device and Samsung Account required  to redeem Offer. Limit only 1 offer per person. This Offer is valid to  all new Samsung Kids subscribers. This Offer is non-transferrable and  cannot be combined with other Samsung offer, discount, or rebate. Offer  only valid in the United States and while supplies last. Void where  prohibited or restricted by law.<br>
+<br>
+© 2016 Samsung Electronics America, Inc. Samsung,  Samsung Kids, Samsung Kids logos are all trademarks of Samsung  Electronics Co., Ltd. All other brands, products and services, and their  respective trademarks, names and logos are the property of their  respective owners. This content is provided for entertainment and  information purposes only. All information included herein is subject to  change without notice.</div>      		
+</div>
+   
+</body>
+</html>

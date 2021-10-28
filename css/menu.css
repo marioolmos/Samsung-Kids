@@ -1,0 +1,126 @@
+/*RESET*/
+html, body, div, span, applet, object, iframe, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, legend, table, caption, tbody, tfoot, thead, tr, th, td {margin:0; padding:0; border:0; outline:0; font-size:100%; vertical-align:baseline; background:transparent;} body {line-height: 1;}ol, ul{list-style:none;} blockquote, q{quotes:none;} blockquote:before, blockquote:after, q:before, q:after{content:'';content:none;} :focus{outline:0;} ins{text-decoration:none;} del{text-decoration:line-through;} table{border-collapse:collapse; border-spacing:0;}
+
+/*MAIN*/
+
+
+a {
+	font-weight: 400;
+}
+
+a:hover {
+	color: #444;
+}
+
+img {
+	width: 100%;
+	height: auto;
+}
+
+header {
+	background: #fff;
+	width: 100%;
+	height: 105px;
+	top: 0;
+	left: 0;
+	border-bottom: 1px solid #eeeeee;
+	z-index: 100;
+	text-align: center;
+}
+
+#logo{
+	margin: 20px auto 8px auto;
+	width: 150px;
+	height: 51px;
+	background: url(../images/logo.png) no-repeat center;
+	background-size: cover;
+	display: block;
+}
+
+nav {
+	margin-left: auto;
+margin-right: auto;
+
+}
+
+#menu-icon {
+	display: hidden;
+	width: 40px;
+	height: 40px;
+	background: #eb6c27 url(../images/menu-icon.png) center;
+	/*border-radius: 25px;*/
+}
+
+a:hover#menu-icon {
+	background-color: #32c133;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	display: inline-block;
+	padding: 15px 15px 0px 15px;
+}
+
+.current {
+	color: #000000;
+}
+
+section {
+	margin: 50px auto 40px;
+	max-width: 980px;
+	position: relative;
+	padding: 20px
+}
+
+
+
+p {
+	line-height: 1.45em;
+	margin-bottom: 20px;
+}
+
+/*MEDIA QUERY*/
+@media only screen and (max-width : 640px) {
+
+	header {
+		height:80px;
+	}
+
+	#menu-icon {
+		display:inline-block;
+	}
+
+	nav ul, nav:active ul { 
+		display: none;
+		position: absolute;
+		padding: 20px;
+		background: #fff;
+		right: 0px;
+		top: 65px;
+		width: 100%;
+	}
+
+	nav li {
+		text-align: center;
+		width: 100%;
+		padding: 10px 0;
+		margin: 0;
+	}
+
+	nav:hover ul {
+		display: none;
+	}
+	
+	#logo{
+		float: left;
+		margin: 15px;
+}
+
+nav {
+	float: right;
+	margin: 20px 15px 15px 15px;
+}
+

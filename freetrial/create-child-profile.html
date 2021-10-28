@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <title>FingerprintPlay</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="description" content="FingerprintPlay" />
+        <meta name="keywords" content="FingerprintPlay" />
+        <meta name="author" content="Mario Olmos" />
+        <link rel="shortcut icon" href="../favicon.ico"> 
+        <link rel="stylesheet" type="text/css" href="../css/demo.css" />
+        <link href="../css/main.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="../css/style.css" />
+        <link href="../css/menu.css" rel="stylesheet" type="text/css">
+        <link href="../css/fonts.css" rel="stylesheet" type="text/css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script type="application/javascript">
+
+
+
+            var currentChild = 1;
+
+            function saveChildInfo() {
+                var kids_list = [];
+                if (typeof(Storage) !== "undefined") {
+                    var kids = $("#child_obj").children();
+                    var child_data = {};
+                    kids.each(function (i) {
+                        var prefix = $(this).attr("id");
+                        if ($("#" + prefix + "_name").val() && $("#" + prefix + "_age").val()) {
+
+                            child_data = {
+                                "name": $("#" + prefix + "_name").val(),
+                                "age": $("#" + prefix + "_age").val()
+                            };
+
+                            kids_list.push(child_data);
+                        }
+                    });
+                    localStorage.setItem("kids", JSON.stringify(kids_list));//save JSON object
+
+                    //get user_id and auth_id from the URL
+                    var user_id = getParameterByName("user_id");
+                    var auth_guid = getParameterByName("auth_guid");
+                    if (user_id || auth_guid) {
+                        localStorage.setItem("user_id", user_id);
+                        localStorage.setItem("auth_guid", auth_guid);
+                    }
+                }
+                $( ".errors" ).remove();
+                if (kids_list.length > 0) {
+                    var path = location.href.split("/");
+                    path.pop();
+                    window.location = path.join("/") + "/set-parent-pin.html";
+                } else {
+                    $(".special-button").after("<div class='errors'><label id='child-error'>Please enter at least one kid's details.</label></div>");
+                }
+
+            }
+
+
+            function addChild() {
+                if (currentChild >= 2) {
+                    $(".anotherchild").addClass("child-hide");
+                } else if (currentChild > 2) {
+                    return;
+                }
+
+                var child_id = Math.floor(Math.random() * 100000000);
+                $("#child_obj").append('<div class="horizontal-rule" id="child_'+child_id+'" >' +
+                        '<div class="field quart first">' +
+                        'CHILD\'S NAME<input name="child_' + child_id  +'_name" type="text" id="child_' + child_id  +'_name" placeholder="" />' +
+                '</div>' +
+
+                '<div class="field twenty styled-select">' +
+                        'AGE' +
+                        '<select name="child_' + child_id  +'_age" id="child_' + child_id +'_age" title="title">' +
+                        '<option></option>' +
+                        '<option selected>01</option>' +
+                '<option>02</option> <option>03</option> <option>04</option> <option>05</option> <option>06</option> <option>07</option> <option>08</option> <option>09</option>' +
+                '</select>' +
+                '</div>' +
+                '<div class="field trash" id="child_'+ child_id +'_delete" onclick="return removeChildObj(this);"><img id="child_'+ child_id +'_delete" src="images/trash.png" width="67" height="67" alt=""/></div>' +
+                        '</div>');
+                currentChild++;
+                return false;
+            }
+
+            function removeChildObj(ele) {
+                if (currentChild < 2) {
+                    return;
+                }
+                $(ele).parent().remove();
+                if ($(".anotherchild").hasClass("child-hide")) {
+                    $(".anotherchild").removeClass("child-hide");
+                }
+                currentChild--;
+            }
+        </script>
+
+		
+</head>
+    <body>
+ 
+ <header>
+
+		<a href="#" id="logo"></a>
+
+		<nav>
+
+			<a href="#" id="menu-icon"></a>
+
+			<ul>
+
+				<li><a href="#">PRODUCT DETAILS</a></li>
+				<li><a href="#">PARENT FEATURES</a></li>
+				<li><a href="#">SUPPORT</a></li>
+
+			</ul>
+
+		</nav>
+
+	</header>
+    
+<div class="wrapper-interior">  
+
+
+<div class="main-double">
+<div class="main-title-box">
+<h1>Create Your Child's Profiles</h1>
+</div>
+	<div class="left-twenty">
+      <div class="steps"><img src="../images/01-on.png" alt="Step 1" class="step-image"/><br>
+	  	<span class="step-title">
+	  	Child Profile</span>
+      </div>
+      <div class="steps"><img src="../images/02-off.png" alt="Step 2" class="step-image"/><br>
+	  	<span class="step-title">
+	  	Parent PIN</span>
+      </div>
+      <div class="steps"><img src="../images/03-off.png" alt="Step 3" class="step-image"/><br>
+	  	<span class="step-title">
+	  	Payment</span>
+      </div>
+	  
+	</div>
+	<div class="right-eighty"><div class="container-medium" style="text-align:center;">
+    <h2>You can create up to 3 different Child's Profiles<br>
+      <br>
+      
+  <!-- Form Starts Here -->
+    </h2>
+    <div id="wrapper">
+  <div>
+
+									<form id="child-form" method="post" action="#">
+
+                                        <div id="child_obj">
+
+<div class="horizontal-rule" id="child_1">
+<div class="field quart first">
+CHILD'S NAME<input class="form-control" name="child-name" type="text" id="child_1_name" placeholder="" />
+									  </div>
+                                        
+                                        <div class="field twenty styled-select">
+										  AGE
+                                            <select name="age" id="child_1_age" title="title">
+                                                <option></option>
+                                                <option selected>01</option>
+                                                <option>02</option>
+                                                <option>03</option>
+                                                <option>04</option>
+                                                <option>05</option>
+                                                <option>06</option>
+                                                <option>07</option>
+                                                <option>08</option>
+                                                <option>09</option>
+                                            </select>
+
+                                            <!--<input class="form-control" name="age" type="text" id="child_1_age" placeholder="" size=2 maxlength="2" />-->
+									  </div>
+                                      <div class="field trash icon-trash" onclick="return removeChildObj(this);"><img src="images/trash.png" width="67" height="67" alt=""/></div>
+                                      
+                                      
+                                      </div>
+                                        </div>
+            <a href="#" class="anotherchild" onclick="return addChild()">+Add Another Child</a>
+                                      <div class="separation"></div>
+
+                                      <input type="button" class="special-button" value="Next" onclick="saveChildInfo()">
+									</form>
+    </div>
+<!-- Form End Here -->
+        
+  </div>
+	</div>
+    
+</div>    
+        
+    
+    
+    
+    
+    
+    
+</div>
+
+<!-- Footer -->
+<div class="separation"></div>
+<div class="footer">
+<div class="margin-footer">1. Samsung Kids App can be downloaded on Samsung Galaxy phone S4 and  above, Samsung Galaxy Note 4 and above, Samsung Galaxy Tab 3 and above,  Samsung Galaxy Tab S and A and Samsung Galaxy View.<br>
+  <br>
+2. To receive a 30 days free trial (a $ 7.99 value) for  Samsung Kids Service ("Offer"), download Samsung Kids from Galaxy Apps  or Google Play store on your compatible Samsung device*, sign-on with  Samsung Account, complete setup and provide a valid form of  payment,choose a subscription plan and click "Subscribe". You must  redeem this Offer before 12/31/2016. To avoid a monthly subscription  fee, Participant must cancel subscription at any time during the 30 day  trial by selecting "Cancel Subscription" in the "Manage Subscriptions"  menu of the App. No refunds or credit are provided for subscriptions  cancelled after the renewal date.  A Samsung Kids subscription is  subject to the Samsung Kids Terms of Service <a href="http://www.samsung.com/us/samsung-kids/terms-and-conditions/" target="_blank">http://www.samsung.com/us/samsung-kids/terms-and-conditions/</a>.  A valid form of payment, a Samsung device and Samsung Account required  to redeem Offer. Limit only 1 offer per person. This Offer is valid to  all new Samsung Kids subscribers. This Offer is non-transferrable and  cannot be combined with other Samsung offer, discount, or rebate. Offer  only valid in the United States and while supplies last. Void where  prohibited or restricted by law.<br>
+<br>
+© 2016 Samsung Electronics America, Inc. Samsung,  Samsung Kids, Samsung Kids logos are all trademarks of Samsung  Electronics Co., Ltd. All other brands, products and services, and their  respective trademarks, names and logos are the property of their  respective owners. This content is provided for entertainment and  information purposes only. All information included herein is subject to  change without notice.</div>      		
+</div>
+    
+    
+     <!-- SCRIPTS FOR VALIDATION STARTS HERE -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/additional-methods.min.js"></script>
+    <script src="js/validation-common.js"></script>
+  <script src="js/validation-child.js"></script>
+  <!-- SCRIPTS FOR VALIDATION ENDS HERE -->
+  
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>FingerprintPlay</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../css/style.css" />
+        <link rel="stylesheet" type="text/css" href="../css/demo.css" />
+        <link href="../css/main.css" rel="stylesheet" type="text/css">
+        <link href="../css/menu.css" rel="stylesheet" type="text/css">
+        <link href="../css/fonts.css" rel="stylesheet" type="text/css">
+		
+	</head>
+    <body onload="checkForServerErrors()">
+    <script src="js/validation-common.js"></script>
+<script>
+    //Handle server errors
+    function checkForServerErrors() {
+        var errorMsg = getParameterByName("error");
+        var user_id = getParameterByName("user_id");
+        var auth_guid = getParameterByName("auth_guid");
+        if(errorMsg) {
+            alert(errorMsg);
+            return false;
+        } else if(user_id && auth_guid) {
+            localStorage.setItem("user_id", getParameterByName("user_id"));
+            localStorage.setItem("auth_guid", getParameterByName("auth_guid"));
+            window.location.href = location.protocol + "//" + location.host + "/fingerprint-websub/create-child-profile.html";
+        }
+    }
+
+    function auth() {
+        // pick page we want to pass the auth_guid to (page will be developed by Web Sub dev team, this just an exmaple)
+        SamsungKidsGoogleAuth(location.protocol + "//" + location.host + "/fingerprint-websub/index.html");
+    }
+
+    function SamsungKidsGoogleAuth(dest) {
+        var client_id = "596161159961-3ihibf0aneq049kec85oqes40i42h64l.apps.googleusercontent.com";
+        var loginUrl = "https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile";
+        loginUrl += "&state=" + encodeURIComponent(dest);
+        loginUrl += "&redirect_uri=" + encodeURIComponent(location.protocol + "//" + location.host + "/samsungkids-authlogin");
+        loginUrl += "&response_type=code";
+        loginUrl += "&client_id=" + client_id;
+
+        window.location = loginUrl;
+    }
+</script>
+    
+
+
+<header>
+
+		<a href="#" id="logo"></a>
+
+		<nav>
+
+			<a href="#" id="menu-icon"></a>
+
+			<ul>
+
+				<li><a href="#">PRODUCT DETAILS</a></li>
+				<li><a href="#">PARENT FEATURES</a></li>
+				<li><a href="#" class="current">FREE TRIAL</a></li>
+				<li><a href="#">DOWNLOAD</a></li>
+				<li><a href="#">SUPPORT</a></li>
+
+			</ul>
+
+		</nav>
+
+	</header>		
+
+	<!-- Home -->
+	<div class="wrapper-start">
+            <div class="container-start">
+              <h1>Start your 30-day Free Trial!</h1><br>
+              <h3>Unlimited access to all of Samsung Kids award winning content.<br>
+              Cancel at any time, no questions asked.</h3>
+              <br>
+               
+              <br>
+              <a href="#" class="button-google" onclick="auth()">SIGN IN WITH GOOGLE</a> 
+              <br>
+              <br><a href="#" class="special-button">LEARN MORE</a><br>
+        <span class="simple-copy">By clicking SIGN IN WITH GOOGLE, I agree to the <a href="#" class="legal" clas="legal">Terms of Use</a> & <a href="#" class="legal" clas="legal">Privacy Policy</a></span>
+        </div>
+    </div>
+
+		
+<!-- White strip -->
+<div class="white-strip">
+<div class="margin-white-strip">
+<h1>Questions? We've got you covered.</h1><br>
+<h3>Still not sure about how Samsung Kids could be the perfect fit for your kid? Check out the support page and see our FAQ section.<br>
+  <br>
+</h3>
+<br>
+  
+  <a href="../support" class="special-button">SUPPORT</a> 
+  
+  </div>
+
+</div>    
+
+<!-- Footer -->
+<div class="footer">
+<div class="margin-footer">1. Samsung Kids App can be downloaded on Samsung Galaxy phone S4 and  above, Samsung Galaxy Note 4 and above, Samsung Galaxy Tab 3 and above,  Samsung Galaxy Tab S and A and Samsung Galaxy View.<br>
+  <br>
+2. To receive a 30 days free trial (a $ 7.99 value) for  Samsung Kids Service ("Offer"), download Samsung Kids from Galaxy Apps  or Google Play store on your compatible Samsung device*, sign-on with  Samsung Account, complete setup and provide a valid form of  payment,choose a subscription plan and click "Subscribe". You must  redeem this Offer before 12/31/2016. To avoid a monthly subscription  fee, Participant must cancel subscription at any time during the 30 day  trial by selecting "Cancel Subscription" in the "Manage Subscriptions"  menu of the App. No refunds or credit are provided for subscriptions  cancelled after the renewal date.  A Samsung Kids subscription is  subject to the Samsung Kids Terms of Service <a href="http://www.samsung.com/us/samsung-kids/terms-and-conditions/" target="_blank">http://www.samsung.com/us/samsung-kids/terms-and-conditions/</a>.  A valid form of payment, a Samsung device and Samsung Account required  to redeem Offer. Limit only 1 offer per person. This Offer is valid to  all new Samsung Kids subscribers. This Offer is non-transferrable and  cannot be combined with other Samsung offer, discount, or rebate. Offer  only valid in the United States and while supplies last. Void where  prohibited or restricted by law.<br>
+<br>
+© 2016 Samsung Electronics America, Inc. Samsung,  Samsung Kids, Samsung Kids logos are all trademarks of Samsung  Electronics Co., Ltd. All other brands, products and services, and their  respective trademarks, names and logos are the property of their  respective owners. This content is provided for entertainment and  information purposes only. All information included herein is subject to  change without notice.</div>      		
+</div>
+			
+
+</body>
+</html>
